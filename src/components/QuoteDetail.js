@@ -3,11 +3,11 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { connect, Provider } from "react-redux";
 
-import Main from "./src/index";
-
-export default function App() {
+export default function QuoteDetail() {
   return (
-    <Main/>
+    <View style={styles.container}>
+        <Text>Quote Detail</Text>
+    </View>
   );
 }
 
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: 80,
+    paddingTop: 80
   },
 });
