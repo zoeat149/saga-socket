@@ -3,10 +3,10 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { connect, Provider } from "react-redux";
 
-export default function QuoteDetail() {
+export default function AccountDetail() {
   return (
     <View style={styles.container}>
-        <Text style={{color:'#fff', fontSize:20}}>Quote Detail Screen</Text>
+        <Text style={{color:'#fff', fontSize:20}}>Account detail screen</Text>
     </View>
   );
 }

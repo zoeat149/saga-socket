@@ -3,22 +3,19 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { connect, Provider } from "react-redux";
 
-import Main from './src/index';
-import store from './src/store';
-
-export default function App() {
+export default function Market() {
   return (
-    <Provider store={store}>
-      <Main/>
-    </Provider>
+    <View style={styles.container}>
+        <Text style={{color:'#fff', fontSize:20}}>Market screen</Text>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 6,
+    backgroundColor: '#43488a',
+    alignItems:'center', 
+    justifyContent:'center'
   },
 });
