@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.11.0",
     "@react-navigation/drawer": "^5.8.4",
     "drawer": "^0.0.2",
     "expo": "~38.0.8",
@@ -19,9 +20,11 @@
     "react-native-autocomplete-input": "^4.2.0",
     "react-native-easy-grid": "^0.2.2",
     "react-native-elements": "^2.0.4",
+    "react-native-gesture": "^0.2.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-modal-dropdown": "^0.7.0",
     "react-native-reanimated": "^1.9.0",
+    "react-native-redash": "^14.2.1",
     "react-native-router-flux": "^4.2.0",
     "react-native-screens": "^2.9.0",
     "react-native-swipe-list-view": "^3.1.2",

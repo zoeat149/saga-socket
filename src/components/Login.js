@@ -12,85 +12,24 @@ import { Actions } from "react-native-router-flux";
 
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-// import gstyles from "../styles/gstyles";
-import * as ReduxActions from "../actions"; //Import your actions
-// import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-// import Toast, { DURATION } from "react-native-easy-toast";
-// import Icon from "react-native-vector-icons/FontAwesome";
-// import { Input } from "react-native-elements";
 
-class LoginForm extends Component {
+import * as ReduxActions from "../actions"; //Import your actions
+
+import LoginForm from "./LoginForm";
+
+
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
-      password: "",
-      ok: false
+      loading: true
     };
-
-    this.signin = this.signin.bind(this);
   }
-
-  signin() {
-    if (this.state.username == "") {
-      Alert.alert("Thông báo", "Tên đăng nhập không được để trống");
-      return;
-    }
-    if (this.state.password == "") {
-      Alert.alert("Thông báo", "Mật khẩu không được để trống");
-      return;
-    }
-    AsyncStorage.setItem("username", this.state.username);
-    AsyncStorage.setItem("password", this.state.password);
-    this.props.login(this.state.username, this.state.password);
-  }
-
-  // componentWillReceiveProps(nextProps){
-  //   if(nextProps.type == "CHECK_LOGIN"){
-  //     Actions.home();
-  //   }
-  // }
 
   render() {
     return (
       <View style={styles.container}>
-        <TextInput
-          style={styles.inputBox}
-          underlineColorAndroid="rgba(0,0,0,0)"
-          placeholder={"Username"}
-          placeholderTextColor="#ffffff"
-          selectionColor="#fff"
-          onChangeText={text => this.setState({ username: text })}
-          ref={input => (this.username = input)}
-          value={this.state.username}
-          keyboardType="email-address"
-          onSubmitEditing={() => this.password.focus()}
-        />
-        <TextInput
-          style={styles.inputBox}
-          underlineColorAndroid="rgba(0,0,0,0)"
-          placeholder={"Password"}
-          secureTextEntry={true}
-          onChangeText={text => this.setState({ password: text })}
-          value={this.state.password}
-          placeholderTextColor="#ffffff"
-          ref={input => (this.password = input)}
-        />
-        <TouchableOpacity style={styles.button} onPress={() => this.signin()}>
-          <Text style={styles.buttonText}>
-            {'Login'}
-          </Text>
-        </TouchableOpacity>
-        {/* <Toast
-          ref="toast"
-          style={gstyles.toast}
-          position="top"
-          positionValue={10}
-          fadeInDuration={750}
-          fadeOutDuration={1000}
-          opacity={0.8}
-          textStyle={{ color: "red" }}
-        /> */}
+        <LoginForm/>
       </View>
     );
   }
@@ -114,7 +53,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 //Connect everything
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
 
 const styles = StyleSheet.create({
   container: {

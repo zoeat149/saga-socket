@@ -21,6 +21,7 @@ export default function Main(){
                     component={Login}
                     hideNavBar
                     gesturesEnabled={false}
+
                 />
                 <Scene
                     key='menu'
@@ -42,7 +43,7 @@ export default function Main(){
                         height: 50,
                         paddingBottom:60
                       }}
-                      initial={true}
+                    initial={true}
 
                 >
                     <Scene 

@@ -1,172 +1,246 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState, Component } from 'react';
+import {StatusBar} from 'expo-status-bar';
+import React, {useState, Component} from 'react';
 import {
-    StyleSheet, 
-    Text, 
-    View, 
-    TouchableHighlight, 
-    Image, 
+    StyleSheet,
+    Text,
+    View,
+    TouchableHighlight,
+    Image,
     Dimensions,
     ImageBackground,
     FlatList,
     TouchableOpacity
 } from 'react-native';
-import { connect, Provider } from "react-redux";
-import { Col, Row, Grid } from "react-native-easy-grid";
-import { SwipeListView, SwipeRow } from "react-native-swipe-list-view";
-import { Actions } from "react-native-router-flux";
-import { Container, Header, Title, Left, Icon, Right, Button, Body, Content, Card, CardItem } from "native-base";
+import {connect, Provider} from "react-redux";
+import {Col, Row, Grid} from "react-native-easy-grid";
+import {SwipeListView, SwipeRow} from "react-native-swipe-list-view";
+import {Actions} from "react-native-router-flux";
+import {
+    Container,
+    Header,
+    Title,
+    Left,
+    Icon,
+    Right,
+    Button,
+    Body,
+    Content,
+    Card,
+    CardItem
+} from "native-base";
 
-import { ScrollView, Platform, Animated } from "react-native";
+import {ScrollView, Platform, Animated} from "react-native";
+import {Extrapolate} from 'react-native-reanimated';
 
 //header animated
 const getRandomInt = (max, min) => {
     return Math.floor(Math.random() * (max - min) + min);
-  };
-const HEADER_MAX_HEIGHT = 250;
-const HEADER_MIN_HEIGHT = Platform.OS === "ios" ? 40 : 53;
+};
+const HEADER_MAX_HEIGHT = 350;
+const HEADER_MIN_HEIGHT = 100;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-class Home extends Component{
-    constructor(props){
+class Home extends Component {
+    constructor(props) {
         super(props);
         this.state = {
-            listData:[
+            listData: [
                 {
-                    key:'HNX',
-                    price:189.3
-                },
-                {
-                    key:'BID',
-                    price:247.2
-                },
-                {
-                    key:'NVL',
-                    price:38.5
-                },
-                {
-                    key:'PNJ',
-                    price:76.7
-                },
-                
-            ]
+                    key: 'HNX',
+                    price: 189.3
+                }, {
+                    key: 'BID',
+                    price: 247.2
+                }, {
+                    key: 'NVL',
+                    price: 38.5
+                }, {
+                    key: 'PNJ',
+                    price: 76.7
+                }
+            ],
+            scrollY: new Animated.Value(0)
         };
     }
-    
+
     nativeScrollY = new Animated.Value(
-        Platform.OS === "ios" ? -HEADER_MAX_HEIGHT : 0
+        Platform.OS === "ios"
+            ? -HEADER_MAX_HEIGHT
+            : 0
     );
-    
-    
-    // change(){
-    //     setInterval(() => {
-    //         listData.forEach(element => {
-    //             this.setState(
-    //                 element.price = element.price + Math.round(Math.random()*4-2)
-    //             )
-    //         });
-    //     }, 5000);
-    // }
+
+    // change(){     setInterval(() => {         listData.forEach(element => {
+    // this.setState(                 element.price = element.price +
+    // Math.round(Math.random()*4-2)             )         });     }, 5000); }
 
     render() {
         let nativeScrollY = Animated.add(
             this.nativeScrollY,
-            Platform.OS === "ios" ? HEADER_MAX_HEIGHT : 0
+            Platform.OS === "ios"
+                ? HEADER_MAX_HEIGHT
+                : 0
         );
+
+        const headerImageHeight = this
+            .state
+            .scrollY
+            .interpolate({
+                inputRange: [
+                    0, HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
+                ],
+                outputRange: [
+                    HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT
+                ],
+                extrapolate: 'clamp'
+            })
 
         return (
             <View style={styles.container}>
-                
-                    <ImageBackground style={{width:Dimensions.get("window").width, height:300}} 
-                    source={require('../../assets/images/banner.jpg')}
-                    >
-                     
-                        {/* <TouchableOpacity
-                            onPress={() => Actions.menu()}
-                        >
-                            <Image 
-                                source={require('../../assets/images/menu.png')}
-                                style={{width:40, height:40, marginLeft:5, tintColor:"#ffffff"}}
-                            />
-                        </TouchableOpacity> */}
-                        <Row style={{flexDirection:'row-reverse'}}>
-                            <TouchableOpacity
-                                onPress={() => Actions.setting()}
-                                style={{marginTop:50, width:40, height:40, marginRight:5}}
-                            >
-                                <Image 
-                                    source={require('../../assets/images/setting.png')}
-                                    style={{width:40, height:40, marginRight:5, tintColor:"#828395"}}
-                                />
+                <ScrollView>
+                    <Animated.View
+                        style={{
+                            height: headerImageHeight,
+                            width: headerImageHeight,
+                            //overflow: 'hidden'
+                        }}>
+                        <ImageBackground
+                            style={{
+                                width: Dimensions
+                                    .get("window")
+                                    .width,
+                                height: 300
+                            }}
+                            source={require('../../assets/images/banner.jpg')}>
 
-                            </TouchableOpacity>
-                        </Row>
-                    </ImageBackground>
-                    <Text style={{color:'#fff', fontSize:24, marginLeft:10, paddingTop: 20}}>Danh Mục</Text>
-                    <SwipeListView
-                        
+                            {/* <TouchableOpacity
+                                onPress={() => Actions.menu()}
+                            >
+                                <Image
+                                    source={require('../../assets/images/menu.png')}
+                                    style={{width:40, height:40, marginLeft:5, tintColor:"#ffffff"}}
+                                />
+                            </TouchableOpacity> */
+                            }
+                            <Row
+                                style={{
+                                    flexDirection: 'row-reverse'
+                                }}>
+                                <TouchableOpacity
+                                    onPress={() => Actions.setting()}
+                                    style={{
+                                        marginTop: 50,
+                                        width: 40,
+                                        height: 40,
+                                        marginRight: 5
+                                    }}>
+                                    <Image
+                                        source={require('../../assets/images/setting.png')}
+                                        style={{
+                                            width: 40,
+                                            height: 40,
+                                            marginRight: 5,
+                                            tintColor: "#828395"
+                                        }}/>
+
+                                </TouchableOpacity>
+                            </Row>
+                        </ImageBackground>
+
+                    </Animated.View>
+                    <Text
+                        style={{
+                            color: '#fff',
+                            fontSize: 24,
+                            marginLeft: 10,
+                            paddingTop: 20
+                        }}>Danh Mục</Text>
+                    <FlatList
                         style={styles.listview}
                         data={this.state.listData}
                         ListHeaderComponent={renderHeader}
-                        renderItem={renderItem}
-                                    
-                    />
-                
+                        renderItem={renderItem}/>
+                </ScrollView>
             </View>
         )
     }
-    
 
-    
 }
-export function renderHeader(){
-    return(
+export function renderHeader() {
+    return (
         <Grid>
             <Row style={styles.row}>
                 <Col style={styles.col}>
-                    <Text style={{color:'#828395'}}>Sym</Text>
+                    <Text
+                        style={{
+                            color: '#828395'
+                        }}>Sym</Text>
                 </Col>
                 <Col style={styles.col}>
-                    <Text style={{color:'#828395'}}>Price</Text>
+                    <Text
+                        style={{
+                            color: '#828395'
+                        }}>Price</Text>
                 </Col>
                 <Col style={styles.col}>
-                    <Text style={{color:'#828395'}}>Low</Text>
+                    <Text
+                        style={{
+                            color: '#828395'
+                        }}>Low</Text>
                 </Col>
                 <Col style={styles.col}>
-                    <Text style={{color:'#828395'}}>High</Text>
+                    <Text
+                        style={{
+                            color: '#828395'
+                        }}>High</Text>
                 </Col>
             </Row>
-            <Row style={{height:5}}></Row>
+            <Row style={{
+                    height: 5
+                }}></Row>
         </Grid>
     )
 }
 
-export function renderItem(data){
-    return(
+export function renderItem(data) {
+    return (
         <TouchableHighlight
             onPress={() => {
                 console.log('You touched me');
 
                 Actions.quote_detail();
             }}
-            style={{borderRadius:5,marginBottom:3}}
-            underlayColor={'#fff'}
-        >
+            style={{
+                borderRadius: 5,
+                marginBottom: 3
+            }}
+            underlayColor={'#fff'}>
             <View>
                 <Grid>
                     <Row style={styles.row}>
-                    <Col style={styles.col}>
-                        <Text style={{color:'#fff'}}>{data.item.key}</Text>
-                    </Col>
-                    <Col style={styles.cow}>
-                        <Text style={{color:'#fff'}}>{data.item.price}</Text>
-                    </Col>
-                    <Col style={styles.cow}>
-                        <Text style={{color:'#fff'}}>{data.item.low}</Text>
-                    </Col>
-                    <Col style={styles.cow}>
-                        <Text style={{color:'#fff'}}>undentified</Text>
-                    </Col>
+                        <Col style={styles.col}>
+                            <Text
+                                style={{
+                                    color: '#fff'
+                                }}>{data.item.key}</Text>
+                        </Col>
+                        <Col style={styles.cow}>
+                            <Text
+                                style={{
+                                    color: '#fff'
+                                }}>{data.item.price}</Text>
+                        </Col>
+                        <Col style={styles.cow}>
+                            <Text
+                                style={{
+                                    color: '#fff'
+                                }}>{data.item.low}</Text>
+                        </Col>
+                        <Col style={styles.cow}>
+                            <Text
+                                style={{
+                                    color: '#fff'
+                                }}>undentified</Text>
+                        </Col>
                     </Row>
                 </Grid>
             </View>
@@ -174,17 +248,9 @@ export function renderItem(data){
     )
 }
 
-
-
-// export function renderItem({key,text}){
-//     return (
-//         <TouchableHighlight>
-//           <View>
-//             <Text>I am {data.item.text} in a SwipeListView</Text>
-//         </View>
-//         </TouchableHighlight>
-//       )
-// }
+// export function renderItem({key,text}){     return ( <TouchableHighlight>
+// <View>             <Text>I am {data.item.text} in a SwipeListView</Text>
+// </View>         </TouchableHighlight> ) }
 
 export default Home;
 
@@ -192,28 +258,27 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#43488a',
-        
-        // alignItems: 'center',
-        // justifyContent: 'center',
+
+        // alignItems: 'center', justifyContent: 'center',
     },
-    listview:{
-        paddingHorizontal:10,
+    listview: {
+        paddingHorizontal: 10,
         paddingVertical: 10
     },
     row: {
-        borderRadius:4,
-        borderWidth:1,
-        borderColor:'#828395',
-        height:40,
-        justifyContent:'space-around',
-        alignItems:'center',
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#828395',
+        height: 40,
+        justifyContent: 'space-around',
+        alignItems: 'center',
         //backgroundColor: '#828395'
     },
-    col:{
+    col: {
         //width:50,
-        paddingLeft:10,
-        alignItems:'stretch',
-        justifyContent:'space-around'
+        paddingLeft: 10,
+        alignItems: 'stretch',
+        justifyContent: 'space-around'
     },
     rowcell: {
         flex: 1,
@@ -221,7 +286,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     menubutton: {
-    width: 30,
-    height: 30
-    },
+        width: 30,
+        height: 30
+    }
 });
