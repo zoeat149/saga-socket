@@ -29,6 +29,8 @@ import {
     CardItem
 } from "native-base";
 
+
+import Cell from "./Cell";
 import {ScrollView, Platform, Animated} from "react-native";
 import {Extrapolate} from 'react-native-reanimated';
 
@@ -44,55 +46,71 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            listData: [
-                {
-                    key: 'HNX',
-                    price: 189.3
-                }, {
-                    key: 'BID',
-                    price: 247.2
-                }, {
-                    key: 'NVL',
-                    price: 38.5
-                }, {
-                    key: 'PNJ',
-                    price: 76.7
-                }
-            ],
-            scrollY: new Animated.Value(0)
+            ok: true,
+            refreshing: false,
+            isVisible: false,
+            sym: "",
+            listStock: "VND,SSI,FLC,VIC",
+            settingdata: this.props.settingdata
         };
+
+        this.renderHeader = this.renderHeader.bind(this);
+        this.renderItem = this.renderItem.bind(this);
     }
 
-    nativeScrollY = new Animated.Value(
-        Platform.OS === "ios"
-            ? -HEADER_MAX_HEIGHT
-            : 0
-    );
+    componentWillUnmount() {
+        this.unsubscribe();
+    }
 
-    // change(){     setInterval(() => {         listData.forEach(element => {
-    // this.setState(                 element.price = element.price +
-    // Math.round(Math.random()*4-2)             )         });     }, 5000); }
+    // showOptions(quote) {
+    //     ActionSheetIOS.showActionSheetWithOptions({
+    //         options: BUTTONS,
+    //         cancelButtonIndex: CANCEL_INDEX,
+    //         destructiveButtonIndex: 1
+    //     }, buttonIndex => {
+    //         switch (buttonIndex) {
+    //             case 0:
+    //                 {
+    //                     Actions.Order({order: Order, edit: true, title: "Sửa Quote"});
+    //                 }
+    //                 break;
+    //             case 1:
+    //                 {
+    //                     this.props.deleteQuote(quote.id);
+    //                 }
+    //                 break;
+    //             case 2:
+    //                 {
+    //                     //Alert.alert('Thông báo','Quay lại');
+    //                 }
+    //                 break;
+    //             default:
+    //                 break;
+    //         }
+    //     });
+    // }
+
+    // _onRefresh() {
+    //     this.setState({refreshing: true});
+    //     this.props.fetchQuotes(this.state.listStock);
+    //     this.props.realtimeQuotes(this.state.listStock);
+    //     this.setState({refreshing: false});
+    // }
+
+
+    // nativeScrollY = new Animated.Value(     Platform.OS === "ios"         ?
+    // -HEADER_MAX_HEIGHT         : 0 ); change(){     setInterval(() => {
+    // listData.forEach(element => { this.setState(                 element.price =
+    // element.price + Math.round(Math.random()*4-2)             )         });
+    // }, 5000); }
 
     render() {
-        let nativeScrollY = Animated.add(
-            this.nativeScrollY,
-            Platform.OS === "ios"
-                ? HEADER_MAX_HEIGHT
-                : 0
-        );
-
-        const headerImageHeight = this
-            .state
-            .scrollY
-            .interpolate({
-                inputRange: [
-                    0, HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
-                ],
-                outputRange: [
-                    HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT
-                ],
-                extrapolate: 'clamp'
-            })
+        // let nativeScrollY = Animated.add(     this.nativeScrollY,     Platform.OS ===
+        // "ios"         ? HEADER_MAX_HEIGHT         : 0 ); const headerImageHeight =
+        // this     .state     .scrollY     .interpolate({         inputRange: [
+        // 0, HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT         ],         outputRange: [
+        // HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT         ],         extrapolate: 'clamp'
+        // })
 
         return (
             <View style={styles.container}>
@@ -179,19 +197,19 @@ export function renderHeader() {
                     <Text
                         style={{
                             color: '#828395'
-                        }}>Price</Text>
+                        }}>LastPrice</Text>
                 </Col>
                 <Col style={styles.col}>
                     <Text
                         style={{
                             color: '#828395'
-                        }}>Low</Text>
+                        }}>Change</Text>
                 </Col>
                 <Col style={styles.col}>
                     <Text
                         style={{
                             color: '#828395'
-                        }}>High</Text>
+                        }}>Lot</Text>
                 </Col>
             </Row>
             <Row style={{
@@ -221,25 +239,25 @@ export function renderItem(data) {
                             <Text
                                 style={{
                                     color: '#fff'
-                                }}>{data.item.key}</Text>
+                                }}>{this.props.data.sym}</Text>
                         </Col>
                         <Col style={styles.cow}>
                             <Text
                                 style={{
                                     color: '#fff'
-                                }}>{data.item.price}</Text>
+                                }}>{this.props.data.lastPrice}</Text>
                         </Col>
                         <Col style={styles.cow}>
                             <Text
                                 style={{
                                     color: '#fff'
-                                }}>{data.item.low}</Text>
+                                }}>{this.props.data.change}</Text>
                         </Col>
                         <Col style={styles.cow}>
                             <Text
                                 style={{
                                     color: '#fff'
-                                }}>undentified</Text>
+                                }}>{this.props.data.lot}</Text>
                         </Col>
                     </Row>
                 </Grid>
@@ -252,6 +270,22 @@ export function renderItem(data) {
 // <View>             <Text>I am {data.item.text} in a SwipeListView</Text>
 // </View>         </TouchableHighlight> ) }
 
+function mapStateToProps(state, props) {
+    //console.log("settingdataxxxxxxxxxxxxxxxx", state.quoteReducer.settingdata);
+    return {
+      quotes: state.dataReducer.quotes,
+    };
+  }
+  
+  // Doing this merges our actions into the component’s props,
+  // while wrapping them in dispatch() so that they immediately dispatch an Action.
+  // Just by doing this, we will have access to the actions defined in out actions file (action/home.js)
+  function mapDispatchToProps(dispatch) {
+    return bindActionCreators(ReduxActions, dispatch);
+  }
+  
+  //Connect everything
+  export default connect(mapStateToProps, mapDispatchToProps)(Home);
 export default Home;
 
 const styles = StyleSheet.create({

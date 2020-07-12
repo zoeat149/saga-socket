@@ -1,6 +1,6 @@
 const config = {
     api: {
-      hosturl: "http://localhost/phpmyadmin/db_structure.php?db=sagasocket",
+      hostname: "https://sbboard.sbsi.vn",
       timeout: 20000
     }
   };

@@ -26,12 +26,9 @@ class LoginForm extends Component {
         this.state = {
             username: "",
             password: "",
-            ok: false
         };
 
-        this.signin = this
-            .signin
-            .bind(this);
+        this.signin = this.signin.bind(this);
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
